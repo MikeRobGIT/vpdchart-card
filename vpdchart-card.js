@@ -23,7 +23,7 @@ class VpdchartCard extends HTMLElement {
       const cropId = this.crops[crop];
   
       if (!this.iframe) {
-        let chartTitle = "";
+        let chartTitle = '';
         if (this.config.title) {
           chartTitle = this.config.title;
         }
@@ -68,23 +68,22 @@ class VpdchartCard extends HTMLElement {
         this.div = this.querySelector('#root > div');
 
         // add url to config
-        this.config.click_url = `https://vpdchart.com/ha.html#${tempUnit},${airRhVal},${airTempVal},${leafTempVal},${cropId}`;
+        this.click_url = `https://vpdchart.com/#${tempUnit},${airRhVal},${airTempVal},${leafTempVal},${cropId}`;
 
-        // Add event listener to iframe for click events
+        // Attach event listener to iframe for click events
         this.iframe.addEventListener('click', () => {
-          if (this.config.click_url) {
-            window.open(this.config.click_url, '_blank'); // Opens the URL in a new tab/window
-          }
+          window.open(this.click_url, '_blank'); // Opens the URL in a new tab/window
         });
-
       }
   
+      // Update iframe source and set click URL
       if ( (airRhVal == "unavailable") || (airTempVal == "unavailable") || (leafTempVal == "unavailable") ) {
         this.iframe.style.display = "none";
         this.div.style.display = "";
       } else {
         const realLeafTempVal = parseFloat(leafTempVal) + (this.config.leaf_temp_offset ? parseFloat(this.config.leaf_temp_offset) : 0);
-        this.iframe.src = "https://vpdchart.com/ha.html#" + tempUnit + "," + airRhVal + "," + airTempVal + "," + realLeafTempVal + "," + cropId;
+        this.click_url = `https://vpdchart.com/#${tempUnit},${airRhVal},${airTempVal},${realLeafTempVal},${cropId}`;
+        this.iframe.src = `https://vpdchart.com/ha.html#${tempUnit},${airRhVal},${airTempVal},${realLeafTempVal},${cropId}`;
         this.iframe.style.display = "";
         this.div.style.display = "none";
       }
