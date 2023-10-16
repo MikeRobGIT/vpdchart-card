@@ -54,7 +54,7 @@ class VpdchartCard extends HTMLElement {
             </style>
           <ha-card header="${chartTitle}">
             <div id="root" style="padding-top: 100.00%;">
-                <iframe sandbox="allow-forms allow-modals allow-popups allow-pointer-lock allow-same-origin allow-scripts" allowfullscreen="true" src="https://vpdchart.com/ha.html#C,50,25,23,0"></iframe>
+                <iframe sandbox="allow-forms allow-modals allow-popups allow-pointer-lock allow-same-origin allow-scripts" allowfullscreen="true" src="https://vpdchart.com/ha.html#${tempUnit},${airRhVal},${airTempVal},${leafTempVal},0"></iframe>
               <div>
                 <p>The chart doesn't render, because some sensors are unavailable:</p>
                 <p>${airRhState.attributes.friendly_name}: ${airRhVal}</p>
@@ -66,6 +66,17 @@ class VpdchartCard extends HTMLElement {
         `;
         this.iframe = this.querySelector('#root > iframe');
         this.div = this.querySelector('#root > div');
+
+        // add url to config
+        this.config.click_url = `https://vpdchart.com/ha.html#${tempUnit},${airRhVal},${airTempVal},${leafTempVal},${cropId}`;
+
+        // Add event listener to iframe for click events
+        this.iframe.addEventListener('click', () => {
+          if (this.config.click_url) {
+            window.open(this.config.click_url, '_blank'); // Opens the URL in a new tab/window
+          }
+        });
+
       }
   
       if ( (airRhVal == "unavailable") || (airTempVal == "unavailable") || (leafTempVal == "unavailable") ) {
